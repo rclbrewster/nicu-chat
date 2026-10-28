@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ *
+ * Design language: Apple-inspired — photography-first minimalism,
+ * adapted for a text-only clinical reference tool. One accent
+ * (Action Blue), near-invisible chrome, no decorative shadows.
+ * ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: light;
+
+  --font-display: "SF Pro Display", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-text: "SF Pro Text", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+
+  /* accent — the only interactive color (Stanford Cardinal Red) */
+  --action: #8c1515;
+  --action-focus: #b1040e;
+
+  /* ink */
+  --ink: #1d1d1f;
+  --ink-80: #333333;
+  --ink-48: #7a7a7a;
+
+  /* surfaces */
+  --canvas: #ffffff;
+  --parchment: #f5f5f7;
+  --pearl: #fafafc;
+  --hairline: #e0e0e0;
+  --divider-soft: #f0f0f0;
+  --danger: #c4342b;
+
+  /* on dark tiles (used by the user chat bubble) */
+  --on-action: #ffffff;
+
+  --radius-sm: 8px;
+  --radius-md: 11px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --action: #e87c7c;
+    --action-focus: #e87c7c;
+    --ink: #f5f5f7;
+    --ink-80: #d2d2d7;
+    --ink-48: #86868b;
+    --canvas: #1d1d1f;
+    --parchment: #161617;
+    --pearl: #272729;
+    --hairline: #38383a;
+    --divider-soft: #2a2a2c;
+    --danger: #ff6b60;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --action: #e87c7c;
+  --action-focus: #e87c7c;
+  --ink: #f5f5f7;
+  --ink-80: #d2d2d7;
+  --ink-48: #86868b;
+  --canvas: #1d1d1f;
+  --parchment: #161617;
+  --pearl: #272729;
+  --hairline: #38383a;
+  --divider-soft: #2a2a2c;
+}
+
+html,
+body {
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.28px;
+  line-height: 1.1;
+}
+
+*,
+*::before,
+*::after {
+  border-color: var(--hairline);
+}
+
+button {
+  font-family: var(--font-text);
+}
+
+/* system-wide press micro-interaction */
+button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+button {
+  transition: transform 0.14s ease, opacity 0.14s ease, background-color 0.14s ease;
+}
+
+:focus-visible {
+  outline: 2px solid var(--action-focus);
+  outline-offset: 2px;
+}
+
+/* ---- rendered answer markdown ---- */
+.prose-answer {
+  font-size: 17px;
+  line-height: 1.52;
+  letter-spacing: -0.374px;
+}
+.prose-answer > :first-child {
+  margin-top: 0;
+}
+.prose-answer > :last-child {
+  margin-bottom: 0;
+}
+.prose-answer p {
+  margin: 0.6rem 0;
+}
+.prose-answer h1,
+.prose-answer h2,
+.prose-answer h3 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.374px;
+  margin: 1rem 0 0.4rem;
+}
+.prose-answer ul,
+.prose-answer ol {
+  margin: 0.6rem 0;
+  padding-left: 1.3rem;
+  list-style: revert;
+}
+.prose-answer li {
+  margin: 0.2rem 0;
+}
+.prose-answer table {
+  border-collapse: collapse;
+  margin: 0.9rem 0;
+  font-size: 14px;
+  letter-spacing: -0.224px;
+  width: 100%;
+}
+.prose-answer th,
+.prose-answer td {
+  border: 1px solid var(--hairline);
+  padding: 0.4rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-answer th {
+  background: var(--parchment);
+  font-weight: 600;
+}
+.prose-answer code {
+  font-size: 0.9em;
+  background: var(--parchment);
+  padding: 0.1rem 0.35rem;
+  border-radius: 5px;
+}
+.prose-answer a {
+  color: var(--action);
+  text-decoration: none;
+}
+.prose-answer a:hover {
+  text-decoration: underline;
+}
+
+/* wide content (tables, code) scrolls inside its own box */
+.prose-answer {
+  overflow-x: auto;
+}

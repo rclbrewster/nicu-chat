@@ -1,0 +1,48 @@
+{
+  "name": "nicu-chat",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "convert": "node scripts/convert.mjs",
+    "ingest": "node scripts/ingest.mjs",
+    "test-retrieval": "node scripts/test-retrieval.mjs"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.40",
+    "@langchain/openai": "^0.3.17",
+    "@langchain/textsplitters": "^0.1.0",
+    "@supabase/ssr": "^0.12.6",
+    "@supabase/supabase-js": "^2.116.0",
+    "gray-matter": "^4.0.3",
+    "mammoth": "^1.12.2",
+    "next": "^15.5.0",
+    "openai": "^4.67.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.5.0",
+    "pdf-parse": "^1.1.1",
+    "pdf-to-png-converter": "^3.6.0",
+    "postcss": "^8.4.47",
+    "sharp": "^0.33.5",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
