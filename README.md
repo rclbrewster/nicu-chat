@@ -9,7 +9,7 @@ screenshots** (not just Markdown).
 - **App**: Next.js 15 (App Router)
 - **Vector store**: Supabase Postgres + `pgvector`
 - **LLM + embeddings**: OpenAI (`gpt-4o-mini` chat, `text-embedding-3-small`, `gpt-4o` vision for OCR)
-- **Auth**: Google sign-in via Supabase, restricted to `@stanford.edu`
+- **Auth**: passwordless email code via Supabase, gated by a shared access code (not tied to an institutional email domain)
 - **Retrieval**: multi-query paraphrase → hybrid (vector + keyword) search → LLM reranker
 
 > ⚠️ This is a reference aid. Answers come from uploaded documents and can be
@@ -40,7 +40,7 @@ Fill in `.env.local`:
 | `NEXT_PUBLIC_SUPABASE_URL` / `SUPABASE_URL` | Supabase → Settings → API → Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → `anon` public key |
 | `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_PRIVATE_KEY` | Supabase → Settings → API → `service_role` secret (server only) |
-| `ALLOWED_EMAIL_DOMAINS` / `NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS` | `stanford.edu` |
+| `ACCESS_CODE` | pick a long/random passphrase yourself; share it out of band |
 
 ## 3. Database
 
@@ -53,25 +53,28 @@ Open the Supabase **SQL Editor** and run the three files in
 
 (If you use the Supabase CLI instead: `supabase link` then `supabase db push`.)
 
-## 4. Sign-in (magic link, restricted to @stanford.edu)
+## 4. Sign-in (email code, gated by an access code)
 
-Auth is passwordless email (a "magic link" + 6-digit code). It works with any
-`@stanford.edu` mailbox regardless of whether that account is on Google or
-Microsoft — no external identity provider to configure.
+Auth is passwordless email — enter an address and a shared access code, get a
+6-digit code by email, enter it, done. **Any email address works** — Gmail,
+Yahoo, whatever — access is controlled entirely by whoever knows `ACCESS_CODE`,
+not by institutional domain. That trade-off (identity-by-passphrase instead of
+identity-by-institution) is deliberate; see the note in `.env.local.example`.
 
 1. Supabase → **Authentication → Sign In / Providers → Email** → make sure it is
-   **enabled**. Turn **Confirm email** off (magic link is itself the confirmation).
+   **enabled**. Turn **Confirm email** off (the code itself is the confirmation).
 2. Supabase → **Authentication → URL Configuration**:
    - Site URL: `http://localhost:3000`
    - Redirect URLs → add `http://localhost:3000/**`
 3. Email delivery: Supabase's built-in email is rate-limited (a few messages per
    hour) — fine for testing. For real use, add **custom SMTP** under
-   Authentication → Emails (SendGrid, SES, or a Stanford relay).
-4. Domain enforcement lives in this app (`middleware.ts`, `lib/auth.ts`,
-   `app/auth/callback/route.ts`): the login form refuses non-`stanford.edu`
-   addresses, and any session whose email isn't in `ALLOWED_EMAIL_DOMAINS` is
-   signed out on the next request. Change the allowed domain(s) via
-   `ALLOWED_EMAIL_DOMAINS` / `NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS` in `.env.local`.
+   Authentication → Emails (SendGrid, SES, Resend, or similar).
+4. Set `ACCESS_CODE` in `.env.local` to a long, hard-to-guess passphrase.
+   It's checked server-side in `app/api/auth/request-otp/route.ts` and never
+   sent to the browser. Anyone who has it can register any email address, so
+   share it out of band and rotate it (telling everyone the new one) if it
+   leaks. There's no per-person revocation — rotating the code is the only way
+   to cut someone off.
 
 ## 5. Build the knowledge base
 
@@ -128,7 +131,7 @@ npm run test-retrieval -- "indomethacin dosing for a symptomatic PDA"
 
 ```bash
 npm run dev
-# http://localhost:3000  → sign in with a @stanford.edu Google account
+# http://localhost:3000  → sign in with any email + the ACCESS_CODE
 ```
 
 Ask a question that's in your documents (expect a cited answer) and one that
@@ -152,8 +155,7 @@ to re-embed.
 1. Push this repo to GitHub, import it in Vercel.
 2. Add all `.env.local` vars as Vercel environment variables. Set
    `NEXT_PUBLIC_SITE_URL` to the production URL.
-3. Add the production `/auth/callback` URL to Supabase redirect URLs and the
-   Google OAuth client.
+3. Add the production `/auth/callback` URL to Supabase's redirect URLs.
 4. Run the SQL migrations against the same Supabase project (or a prod project).
 5. `content/markdown/` is committed, so ingestion can be run from CI or locally
    against the prod database.
@@ -169,15 +171,16 @@ multi-language, automated eval suite.
 app/
   api/chat/retrieval/route.ts   RAG chain (paraphrase → hybrid search → rerank → answer)
   api/health/route.ts
-  login/page.tsx                Google sign-in
-  auth/callback/route.ts        OAuth code exchange + domain check
+  api/auth/request-otp/route.ts access-code check + send sign-in email (server only)
+  login/page.tsx                email + access code → code verification
+  auth/callback/route.ts        link-based sign-in fallback
   page.tsx                      chat page (auth-gated)
 components/                     ChatWindow, ChatMessageBubble, SourcesList, Navbar, Disclaimer
 lib/
   supabase.ts                   server + service-role clients
   supabase-browser.ts           browser client
-  auth.ts                       @stanford.edu enforcement
-middleware.ts                   route gate
+  auth.ts                       session lookup (access itself is gated at sign-up by ACCESS_CODE)
+middleware.ts                   route gate (session required)
 content/
   sections.json                 allowed sections (source of truth)
   sources/                      raw input (git-ignored)

@@ -4,65 +4,52 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getBrowserSupabase } from "@/lib/supabase-browser";
 
-const ALLOWED_DOMAINS = (
-  process.env.NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS ?? "stanford.edu"
-)
-  .split(",")
-  .map((d) => d.trim().toLowerCase())
-  .filter(Boolean);
-
-function domainOk(email: string) {
-  const d = email.split("@")[1]?.toLowerCase();
-  return !!d && ALLOWED_DOMAINS.includes(d);
-}
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function LoginInner() {
   const router = useRouter();
   const params = useSearchParams();
   const [email, setEmail] = useState("");
+  const [accessCode, setAccessCode] = useState("");
   const [code, setCode] = useState("");
   const [stage, setStage] = useState<"email" | "code">("email");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(
-    params.get("error") === "domain"
-      ? `Only @${ALLOWED_DOMAINS[0]} addresses can sign in.`
-      : params.get("error")
-        ? "That sign-in link was invalid or expired. Request a new one."
-        : null,
+    params.get("error") === "link"
+      ? "That sign-in link was invalid or expired — use the code instead."
+      : null,
   );
   const [notice, setNotice] = useState<string | null>(null);
 
   const supabase = getBrowserSupabase();
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (typeof window !== "undefined" ? window.location.origin : "");
 
-  async function sendLink(e: React.FormEvent) {
+  async function sendCode(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setNotice(null);
     const addr = email.trim().toLowerCase();
-    if (!domainOk(addr)) {
-      setError(`Enter your @${ALLOWED_DOMAINS[0]} email address.`);
+    if (!EMAIL_RE.test(addr)) {
+      setError("Enter a valid email address.");
+      return;
+    }
+    if (!accessCode.trim()) {
+      setError("Enter the access code you were given.");
       return;
     }
     setBusy(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email: addr,
-      options: {
-        emailRedirectTo: `${siteUrl}/auth/callback`,
-        shouldCreateUser: true,
-      },
+    const res = await fetch("/api/auth/request-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: addr, code: accessCode.trim() }),
     });
     setBusy(false);
-    if (error) {
-      setError(error.message);
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setError(json.error || "Could not send a code. Try again.");
       return;
     }
     setStage("code");
-    setNotice(
-      `We sent a sign-in link and a 6-digit code to ${addr}. Click the link, or enter the code below.`,
-    );
+    setNotice(`Enter the code we just emailed to ${addr}.`);
   }
 
   async function verifyCode(e: React.FormEvent) {
@@ -90,8 +77,7 @@ function LoginInner() {
           NICU Reference
         </h1>
         <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
-          Sign in with your <span className="text-ink-80">@{ALLOWED_DOMAINS[0]}</span>{" "}
-          email address.
+          Enter your email and the access code you were given.
         </p>
 
         {error && (
@@ -106,14 +92,22 @@ function LoginInner() {
         )}
 
         {stage === "email" ? (
-          <form onSubmit={sendLink} className="mt-6 space-y-3">
+          <form onSubmit={sendCode} className="mt-6 space-y-3">
             <input
               type="email"
               required
               autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder={`you@${ALLOWED_DOMAINS[0]}`}
+              placeholder="you@example.com"
+              className="h-11 w-full rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] outline-none placeholder:text-ink-48 focus:border-action"
+            />
+            <input
+              type="password"
+              required
+              value={accessCode}
+              onChange={(e) => setAccessCode(e.target.value)}
+              placeholder="Access code"
               className="h-11 w-full rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] outline-none placeholder:text-ink-48 focus:border-action"
             />
             <button
@@ -121,13 +115,13 @@ function LoginInner() {
               disabled={busy}
               className="h-11 w-full rounded-full bg-action text-[17px] tracking-[-0.374px] text-white disabled:opacity-40"
             >
-              {busy ? "Sending…" : "Email me a sign-in link"}
+              {busy ? "Sending…" : "Email me a code"}
             </button>
             <button
               type="button"
               onClick={() => {
-                if (!domainOk(email.trim().toLowerCase())) {
-                  setError(`Enter your @${ALLOWED_DOMAINS[0]} email address first.`);
+                if (!EMAIL_RE.test(email.trim().toLowerCase())) {
+                  setError("Enter your email address first.");
                   return;
                 }
                 setError(null);
@@ -135,7 +129,7 @@ function LoginInner() {
               }}
               className="w-full pt-1 text-[14px] tracking-[-0.224px] text-action hover:underline"
             >
-              I already have a code
+              I already have a sign-in code
             </button>
           </form>
         ) : (
