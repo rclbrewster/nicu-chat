@@ -1,4 +1,4 @@
-# NICU Reference Assistant
+# Stanford NICU Reference
 
 A retrieval-augmented chat assistant for NICU clinicians, grounded **only** in a
 curated set of unit documents. Modeled on

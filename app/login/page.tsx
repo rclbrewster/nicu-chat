@@ -97,7 +97,7 @@ function LoginInner() {
     <main className="mx-auto flex min-h-screen max-w-[400px] flex-col items-center justify-center px-6">
       <div className="w-full rounded-[18px] border border-hairline bg-canvas p-8">
         <h1 className="font-display text-[28px] font-semibold leading-tight tracking-[-0.28px]">
-          NICU Reference
+          Stanford NICU Reference
         </h1>
         <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
           {rememberedCode
@@ -210,6 +210,10 @@ function LoginInner() {
       <p className="mt-6 max-w-sm text-center text-[12px] leading-relaxed tracking-[-0.12px] text-ink-48">
         Reference aid grounded in unit documents. Not a substitute for clinical
         judgment, unit protocols, or pharmacist review.
+      </p>
+      <p className="mt-2 max-w-sm text-center text-[12px] font-semibold leading-relaxed tracking-[-0.12px] text-ink-80">
+        Do not enter patient names, MRNs, or any other PHI when asking a
+        question.
       </p>
     </main>
   );

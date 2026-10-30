@@ -141,8 +141,12 @@ export default function ChatWindow() {
           </div>
         )}
 
-        {messages.map((m) => (
-          <ChatMessageBubble key={m.id} message={m} />
+        {messages.map((m, i) => (
+          <ChatMessageBubble
+            key={m.id}
+            message={m}
+            question={m.role === "assistant" ? messages[i - 1]?.content : undefined}
+          />
         ))}
       </div>
 

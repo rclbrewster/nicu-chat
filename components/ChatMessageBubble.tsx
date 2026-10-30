@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import SourcesList, { type Source } from "./SourcesList";
+import FeedbackDialog from "./FeedbackDialog";
 
 export type ChatRole = "user" | "assistant";
 
@@ -13,8 +15,15 @@ export type ChatMessage = {
   sources?: Source[];
 };
 
-export default function ChatMessageBubble({ message }: { message: ChatMessage }) {
+export default function ChatMessageBubble({
+  message,
+  question,
+}: {
+  message: ChatMessage;
+  question?: string;
+}) {
   const isUser = message.role === "user";
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   if (isUser) {
     return (
@@ -34,6 +43,19 @@ export default function ChatMessageBubble({ message }: { message: ChatMessage })
         </ReactMarkdown>
       </div>
       {message.sources && <SourcesList sources={message.sources} />}
+      {message.content && (
+        <button
+          onClick={() => setFeedbackOpen(true)}
+          className="mt-3 text-[12px] tracking-[-0.12px] text-ink-48 hover:text-action hover:underline"
+        >
+          Report an issue with this answer
+        </button>
+      )}
+      <FeedbackDialog
+        open={feedbackOpen}
+        onClose={() => setFeedbackOpen(false)}
+        context={{ question, answer: message.content, sources: message.sources }}
+      />
     </div>
   );
 }
