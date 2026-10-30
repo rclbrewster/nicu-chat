@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { isAuthorized } from "@/lib/auth";
 import ChatWindow from "@/components/ChatWindow";
 import Navbar from "@/components/Navbar";
-import Disclaimer from "@/components/Disclaimer";
 
 export default async function Home() {
   const ok = await isAuthorized();
@@ -11,7 +10,6 @@ export default async function Home() {
   return (
     <div className="mx-auto flex min-h-screen max-w-[760px] flex-col px-5">
       <Navbar />
-      <Disclaimer />
       <ChatWindow />
     </div>
   );

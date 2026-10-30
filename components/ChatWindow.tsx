@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import ChatMessageBubble, { type ChatMessage } from "./ChatMessageBubble";
+import Disclaimer from "./Disclaimer";
 import type { Source } from "./SourcesList";
 
 const SOURCE_SENTINEL = "\n\n__SOURCES__";
@@ -29,6 +30,9 @@ export default function ChatWindow() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const isEmpty = messages.length === 0;
 
   const scrollToBottom = () =>
     requestAnimationFrame(() =>
@@ -109,38 +113,80 @@ export default function ChatWindow() {
     } finally {
       setBusy(false);
       scrollToBottom();
+      inputRef.current?.focus();
     }
   }
 
-  return (
-    <div className="flex flex-1 flex-col py-6">
-      <div
-        ref={scrollRef}
-        className="flex-1 space-y-5 overflow-y-auto pb-6"
-        style={{ minHeight: "52vh" }}
+  const inputForm = (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        send(input);
+      }}
+      className={
+        isEmpty
+          ? "flex w-full gap-2.5"
+          : "sticky bottom-0 flex gap-2.5 border-t border-hairline bg-parchment py-4"
+      }
+    >
+      <input
+        ref={inputRef}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Ask a NICU reference question…"
+        autoFocus={isEmpty}
+        className="h-12 flex-1 rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] text-ink outline-none placeholder:text-ink-48 focus:border-action"
+      />
+      <button
+        type="submit"
+        disabled={busy || !input.trim()}
+        className="h-12 shrink-0 rounded-full bg-action px-6 text-[17px] tracking-[-0.374px] text-white disabled:opacity-40"
       >
-        {messages.length === 0 && (
-          <div className="mt-10">
-            <h1 className="font-display text-[28px] font-semibold leading-tight tracking-[-0.28px]">
-              What do you need to look up?
-            </h1>
-            <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
-              Answers come only from this unit&rsquo;s loaded documents.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2.5">
-              {STARTERS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => send(s)}
-                  className="rounded-full border border-hairline bg-canvas px-4 py-2 text-[14px] tracking-[-0.224px] text-ink-80 hover:border-ink-48"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
+        {busy ? "…" : "Send"}
+      </button>
+    </form>
+  );
+
+  if (isEmpty) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center px-2 py-10 text-center">
+        <h1 className="font-display text-[28px] font-semibold leading-tight tracking-[-0.28px]">
+          What do you need to look up?
+        </h1>
+        <p className="mt-2 text-[15px] tracking-[-0.224px] text-ink-48">
+          Answers come only from this unit&rsquo;s loaded documents.
+        </p>
+
+        <div className="mt-8 w-full max-w-xl">{inputForm}</div>
+
+        <div className="mt-6 flex max-w-xl flex-wrap justify-center gap-2.5">
+          {STARTERS.map((s) => (
+            <button
+              key={s}
+              onClick={() => send(s)}
+              className="rounded-full border border-hairline bg-canvas px-4 py-2 text-[14px] tracking-[-0.224px] text-ink-80 hover:border-ink-48"
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+
+        {error && (
+          <p className="mt-4 text-[14px] tracking-[-0.224px] text-[color:var(--danger)]">
+            {error}
+          </p>
         )}
 
+        <div className="mt-8 w-full max-w-xl">
+          <Disclaimer />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-1 flex-col">
+      <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto py-6">
         {messages.map((m, i) => (
           <ChatMessageBubble
             key={m.id}
@@ -151,32 +197,13 @@ export default function ChatWindow() {
       </div>
 
       {error && (
-        <p className="mb-3 text-[14px] tracking-[-0.224px] text-[color:var(--danger)]">
+        <p className="mb-2 text-[14px] tracking-[-0.224px] text-[color:var(--danger)]">
           {error}
         </p>
       )}
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          send(input);
-        }}
-        className="sticky bottom-0 flex gap-2.5 border-t border-hairline bg-parchment py-4"
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask a NICU reference question…"
-          className="h-11 flex-1 rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] text-ink outline-none placeholder:text-ink-48 focus:border-action"
-        />
-        <button
-          type="submit"
-          disabled={busy || !input.trim()}
-          className="h-11 shrink-0 rounded-full bg-action px-6 text-[17px] tracking-[-0.374px] text-white disabled:opacity-40"
-        >
-          {busy ? "…" : "Send"}
-        </button>
-      </form>
+      <Disclaimer />
+      {inputForm}
     </div>
   );
 }
