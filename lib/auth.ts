@@ -1,14 +1,11 @@
-import { getServerSupabase } from "@/lib/supabase";
+import { cookies } from "next/headers";
+import { isValidSessionToken, SESSION_COOKIE } from "@/lib/session";
 
 /**
- * Returns the signed-in user, or null. Access itself is gated at sign-up
- * time by the shared access code (see app/api/auth/request-otp/route.ts) —
- * any authenticated Supabase user is authorized from here on.
+ * Whether the current request carries a valid shared-access-code session.
+ * Use to gate Server Components and Route Handlers.
  */
-export async function getAuthorizedUser() {
-  const supabase = await getServerSupabase();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user ?? null;
+export async function isAuthorized(): Promise<boolean> {
+  const store = await cookies();
+  return isValidSessionToken(store.get(SESSION_COOKIE)?.value);
 }

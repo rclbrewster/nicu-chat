@@ -1,52 +1,20 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isValidSessionToken, SESSION_COOKIE } from "@/lib/session";
 
 // Paths that never require a session.
-const PUBLIC_PATHS = ["/login", "/auth/callback", "/api/health", "/api/auth"];
+const PUBLIC_PATHS = ["/login", "/api/health", "/api/auth"];
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(
-          cookiesToSet: {
-            name: string;
-            value: string;
-            options?: Record<string, unknown>;
-          }[],
-        ) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
-          );
-          response = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set({ name, value, ...(options ?? {}) } as never),
-          );
-        },
-      },
-    },
-  );
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const { pathname } = request.nextUrl;
   const isPublic = PUBLIC_PATHS.some(
     (p) => pathname === p || pathname.startsWith(p + "/"),
   );
 
-  // Access is gated at sign-up time by the access code (see
-  // app/api/auth/request-otp/route.ts), not by email domain — any signed-in
-  // Supabase user is authorized here.
-  if (!user && !isPublic) {
+  const authorized = await isValidSessionToken(
+    request.cookies.get(SESSION_COOKIE)?.value,
+  );
+
+  if (!authorized && !isPublic) {
     const isApi = pathname.startsWith("/api/");
     if (isApi) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
@@ -56,7 +24,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {

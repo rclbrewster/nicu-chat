@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthorizedUser } from "@/lib/auth";
+import { isAuthorized } from "@/lib/auth";
 import { getServiceSupabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -14,8 +14,7 @@ const CATEGORIES = new Set([
 ]);
 
 export async function POST(req: NextRequest) {
-  const user = await getAuthorizedUser();
-  if (!user) {
+  if (!(await isAuthorized())) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
@@ -38,7 +37,7 @@ export async function POST(req: NextRequest) {
 
   const supabase = getServiceSupabase();
   const { error } = await supabase.from("feedback").insert({
-    user_email: user.email,
+    user_email: null,
     category,
     comment,
     question,

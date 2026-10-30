@@ -6,7 +6,7 @@ import { Document } from "@langchain/core/documents";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
-import { getAuthorizedUser } from "@/lib/auth";
+import { isAuthorized } from "@/lib/auth";
 import { getServiceSupabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -261,8 +261,7 @@ function sourcesHeader(docs: Document[]): string {
 }
 
 export async function POST(req: NextRequest) {
-  const user = await getAuthorizedUser();
-  if (!user) {
+  if (!(await isAuthorized())) {
     return NextResponse.json({ error: "Not authorized" }, { status: 403 });
   }
 

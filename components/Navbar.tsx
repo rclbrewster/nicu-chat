@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { getBrowserSupabase } from "@/lib/supabase-browser";
 import FeedbackDialog from "./FeedbackDialog";
 
-export default function Navbar({ email }: { email: string }) {
+export default function Navbar() {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   async function signOut() {
-    await getBrowserSupabase().auth.signOut();
+    setSigningOut(true);
+    await fetch("/api/auth/logout", { method: "POST" });
     window.location.href = "/login";
   }
 
@@ -18,12 +19,15 @@ export default function Navbar({ email }: { email: string }) {
         Stanford NICU Reference
       </span>
       <div className="flex items-center gap-4 text-[14px] tracking-[-0.224px] text-ink-48">
-        <span className="hidden sm:inline">{email}</span>
         <button onClick={() => setFeedbackOpen(true)} className="text-action hover:underline">
           Feedback
         </button>
-        <button onClick={signOut} className="text-action hover:underline">
-          Sign out
+        <button
+          onClick={signOut}
+          disabled={signingOut}
+          className="text-action hover:underline disabled:opacity-50"
+        >
+          {signingOut ? "Signing out…" : "Sign out"}
         </button>
       </div>
       <FeedbackDialog open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />

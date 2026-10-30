@@ -16,7 +16,6 @@
     "@langchain/core": "^0.3.40",
     "@langchain/openai": "^0.3.17",
     "@langchain/textsplitters": "^0.1.0",
-    "@supabase/ssr": "^0.12.6",
     "@supabase/supabase-js": "^2.116.0",
     "gray-matter": "^4.0.3",
     "mammoth": "^1.12.2",
