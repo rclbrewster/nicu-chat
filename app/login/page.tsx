@@ -101,8 +101,8 @@ function LoginInner() {
         </h1>
         <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
           {rememberedCode
-            ? "Enter your email to get a sign-in code."
-            : "Enter your email and the access code you were given."}
+            ? "Enter your email and we'll send you a sign-in code."
+            : "Enter your email and the access code you were given. We'll then email you a separate sign-in code to confirm it's you."}
         </p>
 
         {error && (
@@ -142,7 +142,7 @@ function LoginInner() {
               disabled={busy}
               className="h-11 w-full rounded-full bg-action text-[17px] tracking-[-0.374px] text-white disabled:opacity-40"
             >
-              {busy ? "Sending…" : "Email me a code"}
+              {busy ? "Sending…" : "Email me a sign-in code"}
             </button>
             {rememberedCode && (
               <button
@@ -208,12 +208,9 @@ function LoginInner() {
       </div>
 
       <p className="mt-6 max-w-sm text-center text-[12px] leading-relaxed tracking-[-0.12px] text-ink-48">
-        Reference aid grounded in unit documents. Not a substitute for clinical
-        judgment, unit protocols, or pharmacist review.
-      </p>
-      <p className="mt-2 max-w-sm text-center text-[12px] font-semibold leading-relaxed tracking-[-0.12px] text-ink-80">
-        Do not enter patient names, MRNs, or any other PHI when asking a
-        question.
+        Reference aid grounded in unit documents. Not a substitute for
+        clinical judgment, unit protocols, or pharmacist review. Do not enter
+        patient names, MRNs, or any other PHI.
       </p>
     </main>
   );
