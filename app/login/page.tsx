@@ -1,16 +1,18 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getBrowserSupabase } from "@/lib/supabase-browser";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const REMEMBERED_CODE_KEY = "nicu-chat:access-code";
 
 function LoginInner() {
   const router = useRouter();
   const params = useSearchParams();
   const [email, setEmail] = useState("");
   const [accessCode, setAccessCode] = useState("");
+  const [rememberedCode, setRememberedCode] = useState(false);
   const [code, setCode] = useState("");
   const [stage, setStage] = useState<"email" | "code">("email");
   const [busy, setBusy] = useState(false);
@@ -22,6 +24,19 @@ function LoginInner() {
   const [notice, setNotice] = useState<string | null>(null);
 
   const supabase = getBrowserSupabase();
+
+  // This device has already proven it knows the access code — don't ask again.
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(REMEMBERED_CODE_KEY);
+      if (saved) {
+        setAccessCode(saved);
+        setRememberedCode(true);
+      }
+    } catch {
+      // localStorage unavailable (private browsing, etc.) — just ask every time.
+    }
+  }, []);
 
   async function sendCode(e: React.FormEvent) {
     e.preventDefault();
@@ -45,9 +60,17 @@ function LoginInner() {
     setBusy(false);
     const json = await res.json().catch(() => ({}));
     if (!res.ok) {
+      // Wrong/rotated code — forget whatever this device had saved and ask again.
+      try {
+        localStorage.removeItem(REMEMBERED_CODE_KEY);
+      } catch {}
+      setRememberedCode(false);
       setError(json.error || "Could not send a code. Try again.");
       return;
     }
+    try {
+      localStorage.setItem(REMEMBERED_CODE_KEY, accessCode.trim());
+    } catch {}
     setStage("code");
     setNotice(`Enter the code we just emailed to ${addr}.`);
   }
@@ -77,7 +100,9 @@ function LoginInner() {
           NICU Reference
         </h1>
         <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
-          Enter your email and the access code you were given.
+          {rememberedCode
+            ? "Enter your email to get a sign-in code."
+            : "Enter your email and the access code you were given."}
         </p>
 
         {error && (
@@ -102,14 +127,16 @@ function LoginInner() {
               placeholder="you@example.com"
               className="h-11 w-full rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] outline-none placeholder:text-ink-48 focus:border-action"
             />
-            <input
-              type="password"
-              required
-              value={accessCode}
-              onChange={(e) => setAccessCode(e.target.value)}
-              placeholder="Access code"
-              className="h-11 w-full rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] outline-none placeholder:text-ink-48 focus:border-action"
-            />
+            {!rememberedCode && (
+              <input
+                type="password"
+                required
+                value={accessCode}
+                onChange={(e) => setAccessCode(e.target.value)}
+                placeholder="Access code"
+                className="h-11 w-full rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] outline-none placeholder:text-ink-48 focus:border-action"
+              />
+            )}
             <button
               type="submit"
               disabled={busy}
@@ -117,6 +144,21 @@ function LoginInner() {
             >
               {busy ? "Sending…" : "Email me a code"}
             </button>
+            {rememberedCode && (
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    localStorage.removeItem(REMEMBERED_CODE_KEY);
+                  } catch {}
+                  setAccessCode("");
+                  setRememberedCode(false);
+                }}
+                className="w-full pt-1 text-[14px] tracking-[-0.224px] text-ink-48 hover:underline"
+              >
+                Not your device? Clear saved access code
+              </button>
+            )}
             <button
               type="button"
               onClick={() => {
