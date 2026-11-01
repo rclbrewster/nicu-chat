@@ -19,6 +19,7 @@ const config: Config = {
         parchment: "var(--parchment)",
         pearl: "var(--pearl)",
         hairline: "var(--hairline)",
+        divider: "var(--divider-soft)",
       },
       borderRadius: {
         sm: "8px",

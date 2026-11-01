@@ -16,18 +16,14 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
 
   return (
     <header className="relative flex items-center justify-between border-b border-hairline py-4">
-      <span className="font-display text-[17px] font-semibold tracking-[-0.374px]">
-        Stanford NICU Reference
-      </span>
+      <button
+        onClick={onNewChat}
+        className="rounded-[8px] px-3 py-1.5 text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-hairline"
+      >
+        + New Chat
+      </button>
 
       <div className="flex items-center gap-1">
-        <button
-          onClick={onNewChat}
-          className="rounded-[8px] px-3 py-1.5 text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-hairline"
-        >
-          + New Chat
-        </button>
-
         <button
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Menu"
