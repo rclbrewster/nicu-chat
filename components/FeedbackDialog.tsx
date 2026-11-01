@@ -21,10 +21,12 @@ export default function FeedbackDialog({
   open,
   onClose,
   context,
+  onSubmitted,
 }: {
   open: boolean;
   onClose: () => void;
   context?: FeedbackContext;
+  onSubmitted?: () => void;
 }) {
   const [category, setCategory] = useState(
     context?.question ? "wrong_answer" : "other",
@@ -69,6 +71,7 @@ export default function FeedbackDialog({
       return;
     }
     setDone(true);
+    onSubmitted?.();
   }
 
   return (

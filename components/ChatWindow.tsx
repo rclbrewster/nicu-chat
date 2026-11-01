@@ -24,6 +24,20 @@ function parseSources(raw: string): Source[] {
   }
 }
 
+function SendArrowIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M5 12h14M13 6l6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function ChatWindow() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -123,11 +137,7 @@ export default function ChatWindow() {
         e.preventDefault();
         send(input);
       }}
-      className={
-        isEmpty
-          ? "flex w-full gap-2.5"
-          : "sticky bottom-0 flex gap-2.5 border-t border-hairline bg-parchment py-4"
-      }
+      className="flex w-full items-center gap-2 rounded-full border border-hairline bg-canvas py-1.5 pl-5 pr-1.5 focus-within:border-action"
     >
       <input
         ref={inputRef}
@@ -135,14 +145,15 @@ export default function ChatWindow() {
         onChange={(e) => setInput(e.target.value)}
         placeholder="Ask a NICU reference question…"
         autoFocus={isEmpty}
-        className="h-12 flex-1 rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] text-ink outline-none placeholder:text-ink-48 focus:border-action"
+        className="h-9 flex-1 bg-transparent text-[17px] tracking-[-0.374px] text-ink outline-none placeholder:text-ink-48"
       />
       <button
         type="submit"
         disabled={busy || !input.trim()}
-        className="h-12 shrink-0 rounded-full bg-action px-6 text-[17px] tracking-[-0.374px] text-white disabled:opacity-40"
+        aria-label="Send"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-action text-white disabled:opacity-40"
       >
-        {busy ? "…" : "Send"}
+        {busy ? <span className="text-[13px]">…</span> : <SendArrowIcon />}
       </button>
     </form>
   );
@@ -202,8 +213,10 @@ export default function ChatWindow() {
         </p>
       )}
 
-      <Disclaimer />
-      {inputForm}
+      <div className="sticky bottom-0 border-t border-hairline bg-parchment pb-4 pt-4">
+        {inputForm}
+        <Disclaimer />
+      </div>
     </div>
   );
 }

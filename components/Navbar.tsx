@@ -23,16 +23,27 @@ export default function Navbar() {
       <button
         onClick={() => setMenuOpen((v) => !v)}
         aria-label="Menu"
-        className="flex h-9 w-9 items-center justify-center rounded-full text-ink-80 hover:bg-parchment"
+        className="flex h-9 w-9 items-center justify-center rounded-full text-ink-80 hover:bg-hairline"
       >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path
-            d="M3 5.5h14M3 10h14M3 14.5h14"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
+        {menuOpen ? (
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M4.5 4.5l11 11M15.5 4.5l-11 11"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M3 5.5h14M3 10h14M3 14.5h14"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        )}
       </button>
 
       {menuOpen && (

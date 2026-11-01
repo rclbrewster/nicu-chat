@@ -6,6 +6,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const CATEGORIES = new Set([
+  "positive",
   "wrong_answer",
   "outdated",
   "missing_info",
