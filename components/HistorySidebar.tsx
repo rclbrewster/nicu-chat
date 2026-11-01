@@ -19,7 +19,7 @@ export default function HistorySidebar({
   onSelect: (id: string) => void;
 }) {
   return (
-    <aside className="hidden w-60 shrink-0 border-r border-hairline bg-parchment px-3 py-5 md:block">
+    <aside className="hidden h-screen w-60 shrink-0 overflow-y-auto border-r border-hairline bg-parchment px-3 py-5 md:block">
       <p className="px-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-48">
         Recent
       </p>

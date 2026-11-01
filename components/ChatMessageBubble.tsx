@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import SourcesList, { type Source } from "./SourcesList";
 import FeedbackDialog from "./FeedbackDialog";
+import LoadingVerb from "./LoadingVerb";
 
 export type ChatRole = "user" | "assistant";
 
@@ -85,11 +86,13 @@ export default function ChatMessageBubble({
 
   return (
     <div className="rounded-[18px] bg-canvas px-5 py-4">
-      <div className="prose-answer">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-          {message.content || "…"}
-        </ReactMarkdown>
-      </div>
+      {message.content ? (
+        <div className="prose-answer">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+        </div>
+      ) : (
+        <LoadingVerb />
+      )}
       {message.sources && <SourcesList sources={message.sources} />}
       {message.content && (
         <div className="mt-3 flex justify-end gap-1">

@@ -71,13 +71,13 @@ export default function ChatShell() {
   if (!activeId) return null;
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       <HistorySidebar
         history={history}
         activeId={activeId}
         onSelect={selectConversation}
       />
-      <div className="mx-auto flex w-full max-w-[760px] flex-1 flex-col px-5">
+      <div className="mx-auto flex h-screen w-full max-w-[760px] flex-1 flex-col overflow-hidden px-5">
         <Navbar onNewChat={newChat} />
         <ChatWindow
           key={activeId}

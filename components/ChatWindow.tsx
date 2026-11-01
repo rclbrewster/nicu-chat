@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ChatMessageBubble, { type ChatMessage } from "./ChatMessageBubble";
 import Disclaimer from "./Disclaimer";
+import BouncingDots from "./BouncingDots";
 import type { Source } from "./SourcesList";
 
 const SOURCE_SENTINEL = "\n\n__SOURCES__";
@@ -173,7 +174,7 @@ export default function ChatWindow({
         aria-label="Send"
         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-action text-white disabled:opacity-40"
       >
-        {busy ? <span className="text-[13px]">…</span> : <SendArrowIcon />}
+        {busy ? <BouncingDots size={4} /> : <SendArrowIcon />}
       </button>
     </form>
   );
@@ -216,8 +217,8 @@ export default function ChatWindow({
   }
 
   return (
-    <div className="flex flex-1 flex-col">
-      <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto py-6">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div ref={scrollRef} className="min-h-0 flex-1 space-y-5 overflow-y-auto py-6">
         {messages.map((m, i) => (
           <ChatMessageBubble
             key={m.id}
