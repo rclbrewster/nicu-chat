@@ -3,7 +3,7 @@
 import { useState } from "react";
 import FeedbackDialog from "./FeedbackDialog";
 
-export default function Navbar() {
+export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
@@ -20,31 +20,40 @@ export default function Navbar() {
         Stanford NICU Reference
       </span>
 
-      <button
-        onClick={() => setMenuOpen((v) => !v)}
-        aria-label="Menu"
-        className="flex h-9 w-9 items-center justify-center rounded-full text-ink-80 hover:bg-hairline"
-      >
-        {menuOpen ? (
-          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-            <path
-              d="M4.5 4.5l11 11M15.5 4.5l-11 11"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        ) : (
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path
-              d="M3 5.5h14M3 10h14M3 14.5h14"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        )}
-      </button>
+      <div className="flex items-center gap-1">
+        <button
+          onClick={onNewChat}
+          className="rounded-[8px] px-3 py-1.5 text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-hairline"
+        >
+          + New Chat
+        </button>
+
+        <button
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Menu"
+          className="flex h-9 w-9 items-center justify-center rounded-[8px] text-ink-80 hover:bg-hairline"
+        >
+          {menuOpen ? (
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M4.5 4.5l11 11M15.5 4.5l-11 11"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M3 5.5h14M3 10h14M3 14.5h14"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          )}
+        </button>
+      </div>
 
       {menuOpen && (
         <div

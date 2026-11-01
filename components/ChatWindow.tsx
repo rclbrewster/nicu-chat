@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatMessageBubble, { type ChatMessage } from "./ChatMessageBubble";
 import Disclaimer from "./Disclaimer";
 import type { Source } from "./SourcesList";
@@ -38,8 +38,14 @@ function SendArrowIcon() {
   );
 }
 
-export default function ChatWindow() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+export default function ChatWindow({
+  initialMessages,
+  onMessagesChange,
+}: {
+  initialMessages?: ChatMessage[];
+  onMessagesChange?: (messages: ChatMessage[]) => void;
+}) {
+  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages ?? []);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,6 +53,20 @@ export default function ChatWindow() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isEmpty = messages.length === 0;
+
+  useEffect(() => {
+    onMessagesChange?.(messages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]);
+
+  // Jump to the bottom immediately when mounting with an existing
+  // conversation (e.g. selected from history).
+  useEffect(() => {
+    if ((initialMessages?.length ?? 0) > 0) {
+      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const scrollToBottom = () =>
     requestAnimationFrame(() =>

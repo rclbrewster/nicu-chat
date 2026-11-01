@@ -114,6 +114,15 @@ button {
   outline-offset: 2px;
 }
 
+/* Text fields show focus via their own border-color change instead of the
+   default outline ring — the ring reads as a mismatched red rectangle
+   around a pill-shaped input. */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
 /* ---- rendered answer markdown ---- */
 .prose-answer {
   font-size: 17px;
