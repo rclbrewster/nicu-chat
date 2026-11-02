@@ -6,8 +6,6 @@ import Disclaimer from "./Disclaimer";
 import BouncingDots from "./BouncingDots";
 import type { Source } from "./SourcesList";
 
-const SOURCE_SENTINEL = "\n\n__SOURCES__";
-
 const STARTERS = [
   "Empiric antibiotics for suspected early-onset sepsis",
   "Starting parenteral nutrition on day 1",
@@ -109,6 +107,8 @@ export default function ChatWindow({
         throw new Error(j.error || `Request failed (${res.status})`);
       }
 
+      const sources = parseSources(res.headers.get("x-sources") ?? "");
+
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let acc = "";
@@ -118,29 +118,17 @@ export default function ChatWindow({
         if (done) break;
         acc += decoder.decode(value, { stream: true });
 
-        const sentinelAt = acc.indexOf(SOURCE_SENTINEL);
-        const visible = sentinelAt >= 0 ? acc.slice(0, sentinelAt) : acc;
         setMessages((prev) =>
           prev.map((m) =>
-            m.id === assistantMsg.id ? { ...m, content: visible } : m,
+            m.id === assistantMsg.id ? { ...m, content: acc } : m,
           ),
         );
         scrollToBottom();
       }
 
-      const sentinelAt = acc.indexOf(SOURCE_SENTINEL);
-      if (sentinelAt >= 0) {
-        const sources = parseSources(
-          acc.slice(sentinelAt + SOURCE_SENTINEL.length).trim(),
-        );
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantMsg.id
-              ? { ...m, content: acc.slice(0, sentinelAt), sources }
-              : m,
-          ),
-        );
-      }
+      setMessages((prev) =>
+        prev.map((m) => (m.id === assistantMsg.id ? { ...m, sources } : m)),
+      );
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Something went wrong";
       setError(msg);

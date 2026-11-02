@@ -59,8 +59,8 @@ Answer ONLY using the information in the context below, which is retrieved from 
 - If two matching sources give DIFFERENT values, report both, attribute each to its document, and point out the more specific or more recently dated one — do not silently pick one.
 - Feed volumes, fluid rates, and drug doses in these documents are almost always given PER KILOGRAM (e.g. "mL/kg/day", "mcg/kg/dose"). A per-kg value from a table that matches the case IS a complete answer — provide it. Do not reply that the information is missing just because an absolute (total) number is not tabulated.
 - Quote per-kg rates exactly as written. Do NOT multiply a per-kg rate by the patient's weight to produce an absolute dose or volume — state the rate and let the clinician calculate.
-- When you state a medication dose, infusion rate, or numeric threshold, quote it as written in the source and name the source document.
-- Cite the source for every substantive statement, using the "Source:" and (when present) page shown in the context, e.g. "(Neonatal Antibiotic Guideline, p. 3)".
+- When you state a medication dose, infusion rate, or numeric threshold, quote it as written in the source.
+- Do not add a "Source:" line, footer, or document name at the end of your answer — the application lists the source documents separately below your reply. The one exception is rule above about two sources giving different values: there, name each document inline so the clinician can tell which value came from which.
 - Prefer tables when the source presents information as a table.
 - Each context entry starts with a "Section:" line naming its clinical area. If an entry's Section is unrelated to the question, ignore it entirely — do not cite or mention it.
 
