@@ -18,7 +18,7 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
     <header className="relative flex items-center justify-between border-b border-hairline py-4">
       <button
         onClick={onNewChat}
-        className="rounded-[8px] px-3 py-1.5 text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-hairline"
+        className="rounded-[8px] px-3 py-1.5 text-[17px] tracking-[-0.374px] text-ink-80 hover:bg-hairline"
       >
         + New Chat
       </button>
@@ -58,7 +58,7 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
         />
       )}
       {menuOpen && (
-        <div className="absolute right-0 top-[calc(100%+6px)] z-50 w-48 overflow-hidden rounded-[11px] border border-hairline bg-canvas py-1.5">
+        <div className="absolute right-0 top-[calc(100%+2px)] z-50 w-48 overflow-hidden rounded-[11px] border border-hairline bg-canvas py-1.5">
           <button
             onClick={() => {
               setMenuOpen(false);

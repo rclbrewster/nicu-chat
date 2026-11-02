@@ -47,10 +47,14 @@ export default function ChatShell() {
   function handleMessagesChange(id: string, messages: ChatMessage[]) {
     if (messages.length === 0) return;
     setHistory((prev) => {
-      const next = [
-        { id, title: titleFrom(messages), messages, updatedAt: Date.now() },
-        ...prev.filter((c) => c.id !== id),
-      ];
+      const entry = { id, title: titleFrom(messages), messages, updatedAt: Date.now() };
+      // Update an existing conversation in place so it doesn't jump to the
+      // top of the list just because it was continued or re-selected — only
+      // brand-new conversations get prepended.
+      const exists = prev.some((c) => c.id === id);
+      const next = exists
+        ? prev.map((c) => (c.id === id ? entry : c))
+        : [entry, ...prev];
       saveHistory(next);
       return next;
     });
@@ -68,6 +72,15 @@ export default function ChatShell() {
     setActiveMessages(conv.messages);
   }
 
+  function deleteConversation(id: string) {
+    setHistory((prev) => {
+      const next = prev.filter((c) => c.id !== id);
+      saveHistory(next);
+      return next;
+    });
+    if (id === activeId) newChat();
+  }
+
   if (!activeId) return null;
 
   return (
@@ -76,8 +89,9 @@ export default function ChatShell() {
         history={history}
         activeId={activeId}
         onSelect={selectConversation}
+        onDelete={deleteConversation}
       />
-      <div className="mx-auto flex h-screen w-full max-w-[760px] flex-1 flex-col overflow-hidden px-5">
+      <div className="mx-auto flex h-screen w-full max-w-[960px] flex-1 flex-col overflow-hidden px-5">
         <Navbar onNewChat={newChat} />
         <ChatWindow
           key={activeId}

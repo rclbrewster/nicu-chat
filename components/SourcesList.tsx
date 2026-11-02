@@ -13,15 +13,15 @@ export default function SourcesList({ sources }: { sources: Source[] }) {
   if (!sources.length) return null;
 
   return (
-    <div className="mt-3 border-t border-hairline pt-3 text-[14px] tracking-[-0.224px]">
+    <div>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="text-action hover:underline"
+        className="text-[12px] tracking-[-0.12px] text-ink-48 hover:text-ink-80 hover:underline"
       >
         {open ? "Hide" : "Show"} sources ({sources.length})
       </button>
       {open && (
-        <ul className="mt-2 space-y-1.5">
+        <ul className="mt-2 space-y-1.5 text-[14px] tracking-[-0.224px]">
           {sources.map((s, i) => (
             <li key={i} className="text-ink-80">
               <span className="font-semibold">{s.title || s.source_file}</span>

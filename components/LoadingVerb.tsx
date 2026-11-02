@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BouncingDots from "./BouncingDots";
 
 const VERBS = [
@@ -20,11 +20,18 @@ const VERBS = [
 ];
 
 export default function LoadingVerb() {
-  const [verb] = useState(() => VERBS[Math.floor(Math.random() * VERBS.length)]);
+  const [index, setIndex] = useState(() => Math.floor(Math.random() * VERBS.length));
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % VERBS.length);
+    }, 3000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <span className="inline-flex items-center gap-1.5 text-[15px] tracking-[-0.224px] text-ink-48">
-      {verb}
+      {VERBS[index]}
       <BouncingDots />
     </span>
   );

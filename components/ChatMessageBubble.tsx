@@ -93,38 +93,42 @@ export default function ChatMessageBubble({
       ) : (
         <LoadingVerb />
       )}
-      {message.sources && <SourcesList sources={message.sources} />}
       {message.content && (
-        <div className="mt-3 flex justify-end gap-1">
-          <button
-            onClick={thumbsUp}
-            disabled={!!vote}
-            aria-label="Helpful"
-            className={
-              "flex h-7 w-7 items-center justify-center rounded-full disabled:opacity-100 " +
-              (vote === "up"
-                ? "text-action"
-                : "text-ink-48 hover:bg-parchment hover:text-ink-80")
-            }
-          >
-            <ThumbUpIcon />
-          </button>
-          <button
-            onClick={() => {
-              setVote("down");
-              setFeedbackOpen(true);
-            }}
-            disabled={!!vote}
-            aria-label="Report an issue"
-            className={
-              "flex h-7 w-7 items-center justify-center rounded-full disabled:opacity-100 " +
-              (vote === "down"
-                ? "text-action"
-                : "text-ink-48 hover:bg-parchment hover:text-ink-80")
-            }
-          >
-            <ThumbDownIcon />
-          </button>
+        <div className="mt-3 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            {message.sources && <SourcesList sources={message.sources} />}
+          </div>
+          <div className="flex shrink-0 gap-1">
+            <button
+              onClick={thumbsUp}
+              disabled={!!vote}
+              aria-label="Helpful"
+              className={
+                "flex h-7 w-7 items-center justify-center rounded-full disabled:opacity-100 " +
+                (vote === "up"
+                  ? "text-action"
+                  : "text-ink-48 hover:bg-parchment hover:text-ink-80")
+              }
+            >
+              <ThumbUpIcon />
+            </button>
+            <button
+              onClick={() => {
+                setVote("down");
+                setFeedbackOpen(true);
+              }}
+              disabled={!!vote}
+              aria-label="Report an issue"
+              className={
+                "flex h-7 w-7 items-center justify-center rounded-full disabled:opacity-100 " +
+                (vote === "down"
+                  ? "text-action"
+                  : "text-ink-48 hover:bg-parchment hover:text-ink-80")
+              }
+            >
+              <ThumbDownIcon />
+            </button>
+          </div>
         </div>
       )}
       <FeedbackDialog
