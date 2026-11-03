@@ -23,7 +23,7 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
         + New Chat
       </button>
 
-      <div className="flex items-center gap-1">
+      <div className="relative flex items-center gap-1">
         <button
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Menu"
@@ -49,34 +49,34 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
             </svg>
           )}
         </button>
-      </div>
 
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
-      {menuOpen && (
-        <div className="absolute right-0 top-[calc(100%+2px)] z-50 w-48 overflow-hidden rounded-[11px] border border-hairline bg-canvas py-1.5">
-          <button
-            onClick={() => {
-              setMenuOpen(false);
-              setFeedbackOpen(true);
-            }}
-            className="block w-full px-4 py-2 text-left text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-parchment"
-          >
-            Feedback
-          </button>
-          <button
-            onClick={signOut}
-            disabled={signingOut}
-            className="block w-full px-4 py-2 text-left text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-parchment disabled:opacity-50"
-          >
-            {signingOut ? "Signing out…" : "Sign out"}
-          </button>
-        </div>
-      )}
+        {menuOpen && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
+        {menuOpen && (
+          <div className="absolute right-0 top-[calc(100%+2px)] z-50 w-48 overflow-hidden rounded-[11px] border border-hairline bg-canvas py-1.5">
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                setFeedbackOpen(true);
+              }}
+              className="block w-full px-4 py-2 text-left text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-parchment"
+            >
+              Feedback
+            </button>
+            <button
+              onClick={signOut}
+              disabled={signingOut}
+              className="block w-full px-4 py-2 text-left text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-parchment disabled:opacity-50"
+            >
+              {signingOut ? "Signing out…" : "Sign out"}
+            </button>
+          </div>
+        )}
+      </div>
 
       <FeedbackDialog open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
     </header>

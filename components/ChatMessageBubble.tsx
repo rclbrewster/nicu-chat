@@ -67,7 +67,12 @@ export default function ChatMessageBubble({
   }
 
   async function thumbsUp() {
-    if (vote || sendingUp) return;
+    if (sendingUp) return;
+    if (vote === "up") {
+      setVote(null);
+      return;
+    }
+    setVote("up");
     setSendingUp(true);
     const res = await fetch("/api/feedback", {
       method: "POST",
@@ -81,7 +86,16 @@ export default function ChatMessageBubble({
       }),
     });
     setSendingUp(false);
-    if (res.ok) setVote("up");
+    if (!res.ok) setVote(null);
+  }
+
+  function thumbsDown() {
+    if (vote === "down") {
+      setVote(null);
+      return;
+    }
+    setVote("down");
+    setFeedbackOpen(true);
   }
 
   return (
@@ -101,10 +115,11 @@ export default function ChatMessageBubble({
           <div className="flex shrink-0 gap-1">
             <button
               onClick={thumbsUp}
-              disabled={!!vote}
+              disabled={sendingUp}
               aria-label="Helpful"
+              aria-pressed={vote === "up"}
               className={
-                "flex h-7 w-7 items-center justify-center rounded-full disabled:opacity-100 " +
+                "flex h-7 w-7 items-center justify-center rounded-full " +
                 (vote === "up"
                   ? "text-action"
                   : "text-ink-48 hover:bg-parchment hover:text-ink-80")
@@ -113,14 +128,11 @@ export default function ChatMessageBubble({
               <ThumbUpIcon />
             </button>
             <button
-              onClick={() => {
-                setVote("down");
-                setFeedbackOpen(true);
-              }}
-              disabled={!!vote}
+              onClick={thumbsDown}
               aria-label="Report an issue"
+              aria-pressed={vote === "down"}
               className={
-                "flex h-7 w-7 items-center justify-center rounded-full disabled:opacity-100 " +
+                "flex h-7 w-7 items-center justify-center rounded-full " +
                 (vote === "down"
                   ? "text-action"
                   : "text-ink-48 hover:bg-parchment hover:text-ink-80")
