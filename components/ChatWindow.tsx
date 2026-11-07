@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import ChatMessageBubble, { type ChatMessage } from "./ChatMessageBubble";
 import Disclaimer from "./Disclaimer";
-import BouncingDots from "./BouncingDots";
 import type { Source } from "./SourcesList";
 
 const STARTERS = [
@@ -181,7 +180,7 @@ export default function ChatWindow({
           (canSend ? "bg-action text-white" : "bg-hairline text-ink-80")
         }
       >
-        {busy ? <BouncingDots size={4} /> : <SendArrowIcon />}
+        <SendArrowIcon />
       </button>
     </form>
   );
