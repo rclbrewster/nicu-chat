@@ -18,7 +18,7 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
     <header className="relative flex items-center justify-between border-b border-hairline py-4">
       <button
         onClick={onNewChat}
-        className="rounded-[8px] px-3 py-1.5 text-[17px] tracking-[-0.374px] text-ink-80 hover:bg-hairline"
+        className="rounded-[8px] px-3 py-1.5 text-[17px] tracking-[-0.374px] text-ink hover:bg-hairline"
       >
         + New Chat
       </button>
@@ -27,7 +27,7 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
         <button
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Menu"
-          className="flex h-9 w-9 items-center justify-center rounded-[8px] text-ink-80 hover:bg-hairline"
+          className="flex h-9 w-9 items-center justify-center rounded-[8px] text-ink hover:bg-hairline"
         >
           {menuOpen ? (
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none">

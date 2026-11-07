@@ -99,7 +99,7 @@ export default function ChatMessageBubble({
   }
 
   return (
-    <div className="rounded-[18px] bg-parchment px-5 py-4">
+    <div className="px-1 py-2">
       {message.content ? (
         <div className="prose-answer">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>

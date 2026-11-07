@@ -140,13 +140,15 @@ export default function ChatWindow({
     }
   }
 
+  const canSend = !busy && input.trim().length > 0;
+
   const inputForm = (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         send(input);
       }}
-      className="flex w-full items-center gap-2 rounded-full border border-hairline bg-canvas py-1.5 pl-5 pr-1.5 focus-within:border-action"
+      className="flex w-full items-center gap-2 rounded-full border border-hairline bg-parchment py-1.5 pl-5 pr-1.5 focus-within:border-action"
     >
       <input
         ref={inputRef}
@@ -158,9 +160,12 @@ export default function ChatWindow({
       />
       <button
         type="submit"
-        disabled={busy || !input.trim()}
+        disabled={!canSend}
         aria-label="Send"
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-action text-white disabled:opacity-40"
+        className={
+          "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white " +
+          (canSend ? "bg-action" : "bg-ink-48")
+        }
       >
         {busy ? <BouncingDots size={4} /> : <SendArrowIcon />}
       </button>
@@ -222,7 +227,7 @@ export default function ChatWindow({
         </p>
       )}
 
-      <div className="sticky bottom-0 border-t border-hairline bg-parchment pb-4 pt-4">
+      <div className="sticky bottom-0 bg-canvas pb-4 pt-4">
         {inputForm}
         <Disclaimer />
       </div>

@@ -48,7 +48,7 @@ export default function HistorySidebar({
               onClick={() => onSelect(c.id)}
               title={c.title}
               className={
-                "block w-full truncate rounded-[8px] px-2 py-1.5 pr-7 text-left text-[15px] tracking-[-0.224px] text-ink-80 " +
+                "block w-full truncate rounded-[8px] px-2 py-1.5 pr-7 text-left text-[15px] tracking-[-0.224px] text-ink " +
                 (c.id === activeId ? "bg-hairline" : "hover:bg-divider")
               }
             >
