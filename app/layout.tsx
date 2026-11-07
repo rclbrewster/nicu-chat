@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Stanford NICU Reference",
+  title: "NICU Wayfinder",
   description:
     "A retrieval-augmented reference tool for NICU clinicians, grounded in a curated set of unit documents.",
 };

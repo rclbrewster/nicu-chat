@@ -59,7 +59,7 @@ export default function ChatMessageBubble({
   if (isUser) {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[85%] rounded-[18px] bg-action px-4 py-2.5 text-[17px] leading-snug tracking-[-0.374px] text-white">
+        <div className="max-w-[85%] rounded-[18px] bg-pearl px-4 py-2.5 text-[17px] leading-snug tracking-[-0.374px] text-ink">
           <p className="whitespace-pre-wrap">{message.content}</p>
         </div>
       </div>
@@ -99,7 +99,7 @@ export default function ChatMessageBubble({
   }
 
   return (
-    <div className="rounded-[18px] bg-canvas px-5 py-4">
+    <div className="rounded-[18px] bg-parchment px-5 py-4">
       {message.content ? (
         <div className="prose-answer">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
@@ -121,8 +121,8 @@ export default function ChatMessageBubble({
               className={
                 "flex h-7 w-7 items-center justify-center rounded-full " +
                 (vote === "up"
-                  ? "text-action"
-                  : "text-ink-48 hover:bg-parchment hover:text-ink-80")
+                  ? "text-ink"
+                  : "text-ink-48 hover:bg-pearl hover:text-ink-80")
               }
             >
               <ThumbUpIcon />
@@ -134,8 +134,8 @@ export default function ChatMessageBubble({
               className={
                 "flex h-7 w-7 items-center justify-center rounded-full " +
                 (vote === "down"
-                  ? "text-action"
-                  : "text-ink-48 hover:bg-parchment hover:text-ink-80")
+                  ? "text-ink"
+                  : "text-ink-48 hover:bg-pearl hover:text-ink-80")
               }
             >
               <ThumbDownIcon />

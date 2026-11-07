@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Disclaimer from "@/components/Disclaimer";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,7 +33,7 @@ export default function LoginPage() {
     <main className="mx-auto flex min-h-screen max-w-[400px] flex-col items-center justify-center px-6">
       <div className="w-full rounded-[18px] border border-hairline bg-canvas p-8">
         <h1 className="font-display text-[28px] font-semibold leading-tight tracking-[-0.28px]">
-          Stanford NICU Reference
+          NICU Wayfinder
         </h1>
         <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
           Enter the access code you were given.
@@ -64,11 +65,9 @@ export default function LoginPage() {
         </form>
       </div>
 
-      <p className="mt-6 max-w-sm text-center text-[12px] leading-relaxed tracking-[-0.12px] text-ink-48">
-        Reference aid grounded in unit documents. Not a substitute for
-        clinical judgment, unit protocols, or pharmacist review. Do not enter
-        patient names, MRNs, or any other PHI.
-      </p>
+      <div className="mt-6 max-w-sm">
+        <Disclaimer />
+      </div>
     </main>
   );
 }

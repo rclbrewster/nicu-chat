@@ -34,11 +34,11 @@ export default function HistorySidebar({
   onDelete: (id: string) => void;
 }) {
   return (
-    <aside className="hidden h-screen w-60 shrink-0 overflow-y-auto border-r border-hairline bg-parchment px-3 py-5 md:block">
-      <p className="px-2 font-display text-[15px] font-semibold tracking-[-0.224px] text-ink">
-        Stanford NICU Reference
+    <aside className="hidden h-screen w-72 shrink-0 overflow-y-auto border-r border-hairline bg-parchment px-3 py-5 md:block">
+      <p className="px-2 font-display text-[17px] font-semibold tracking-[-0.374px] text-ink">
+        NICU Wayfinder
       </p>
-      <p className="mt-5 px-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-48">
+      <p className="mt-5 px-2 text-[12px] font-semibold uppercase tracking-[0.06em] text-ink-48">
         Recent
       </p>
       <nav className="mt-2 space-y-0.5">
@@ -48,7 +48,7 @@ export default function HistorySidebar({
               onClick={() => onSelect(c.id)}
               title={c.title}
               className={
-                "block w-full truncate rounded-[8px] px-2 py-1.5 pr-7 text-left text-[14px] tracking-[-0.224px] text-ink-80 " +
+                "block w-full truncate rounded-[8px] px-2 py-1.5 pr-7 text-left text-[15px] tracking-[-0.224px] text-ink-80 " +
                 (c.id === activeId ? "bg-hairline" : "hover:bg-divider")
               }
             >
@@ -67,7 +67,7 @@ export default function HistorySidebar({
           </div>
         ))}
         {history.length === 0 && (
-          <p className="px-2 py-1.5 text-[13px] text-ink-48">
+          <p className="px-2 py-1.5 text-[14px] text-ink-48">
             No conversations yet
           </p>
         )}
