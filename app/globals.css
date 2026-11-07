@@ -4,9 +4,9 @@
 
 /* ------------------------------------------------------------------ *
  * Design language: Apple-inspired — photography-first minimalism,
- * adapted for a text-only clinical reference tool. One accent (deep
- * blue), used sparingly for primary buttons only; near-invisible
- * chrome, no decorative shadows.
+ * adapted for a text-only clinical reference tool. One accent (red),
+ * used sparingly for primary buttons only; near-invisible chrome, no
+ * decorative shadows.
  * ------------------------------------------------------------------ */
 
 :root {
@@ -16,8 +16,8 @@
   --font-text: "SF Pro Text", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
 
   /* accent — reserved for primary buttons (sign in, submit) and focus rings */
-  --action: #2225d1;
-  --action-focus: #1b1ea7;
+  --action: #e60323;
+  --action-focus: #b8021c;
 
   /* ink */
   --ink: #191b1f;
@@ -44,8 +44,8 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --action: #89a9ef;
-    --action-focus: #89a9ef;
+    --action: #ff453a;
+    --action-focus: #ff453a;
     --ink: #f5f5f7;
     --ink-80: #d2d2d7;
     --ink-48: #86868b;
@@ -60,8 +60,8 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --action: #89a9ef;
-  --action-focus: #89a9ef;
+  --action: #ff453a;
+  --action-focus: #ff453a;
   --ink: #f5f5f7;
   --ink-80: #d2d2d7;
   --ink-48: #86868b;

@@ -20,13 +20,16 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const category = String(body.category ?? "other");
+  const categoriesInput: unknown[] = Array.isArray(body.categories)
+    ? body.categories
+    : [body.category ?? "other"];
+  const categories = categoriesInput.map(String).filter((c) => CATEGORIES.has(c));
   const comment = String(body.comment ?? "").trim();
   const question = typeof body.question === "string" ? body.question : null;
   const answer = typeof body.answer === "string" ? body.answer : null;
   const sources = Array.isArray(body.sources) ? body.sources : null;
 
-  if (!CATEGORIES.has(category)) {
+  if (categories.length === 0) {
     return NextResponse.json({ error: "Invalid category" }, { status: 400 });
   }
   if (!comment || comment.length > 4000) {
@@ -39,7 +42,7 @@ export async function POST(req: NextRequest) {
   const supabase = getServiceSupabase();
   const { error } = await supabase.from("feedback").insert({
     user_email: null,
-    category,
+    category: categories.join(","),
     comment,
     question,
     answer,
