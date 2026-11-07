@@ -12,8 +12,8 @@
 :root {
   color-scheme: light;
 
-  --font-display: "SF Pro Display", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
-  --font-text: "SF Pro Text", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-dm-sans), -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-text: var(--font-dm-sans), -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
 
   /* accent — reserved for primary buttons (sign in, submit) and focus rings */
   --action: #e60323;
