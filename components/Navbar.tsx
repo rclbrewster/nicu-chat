@@ -11,7 +11,7 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
   async function signOut() {
     setSigningOut(true);
     await fetch("/api/auth/logout", { method: "POST" });
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 
   return (

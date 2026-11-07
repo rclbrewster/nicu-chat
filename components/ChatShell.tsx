@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import ChatWindow from "./ChatWindow";
 import HistorySidebar, { type Conversation } from "./HistorySidebar";
+import LoginModal from "./LoginModal";
 import type { ChatMessage } from "./ChatMessageBubble";
 
 const STORAGE_KEY = "nicu-chat:history";
@@ -34,7 +35,8 @@ function titleFrom(messages: ChatMessage[]): string {
   return text.length > TITLE_MAX ? text.slice(0, TITLE_MAX) + "…" : text;
 }
 
-export default function ChatShell() {
+export default function ChatShell({ initialAuthorized }: { initialAuthorized: boolean }) {
+  const [authorized, setAuthorized] = useState(initialAuthorized);
   const [history, setHistory] = useState<Conversation[]>([]);
   const [activeId, setActiveId] = useState("");
   const [activeMessages, setActiveMessages] = useState<ChatMessage[]>([]);
@@ -84,21 +86,29 @@ export default function ChatShell() {
   if (!activeId) return null;
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <HistorySidebar
-        history={history}
-        activeId={activeId}
-        onSelect={selectConversation}
-        onDelete={deleteConversation}
-      />
-      <div className="mx-auto flex h-screen w-full max-w-[960px] flex-1 flex-col overflow-hidden px-5">
-        <Navbar onNewChat={newChat} />
-        <ChatWindow
-          key={activeId}
-          initialMessages={activeMessages}
-          onMessagesChange={(msgs) => handleMessagesChange(activeId, msgs)}
+    <>
+      <div
+        className={
+          "flex h-screen overflow-hidden" +
+          (authorized ? "" : " pointer-events-none select-none blur-sm")
+        }
+      >
+        <HistorySidebar
+          history={history}
+          activeId={activeId}
+          onSelect={selectConversation}
+          onDelete={deleteConversation}
         />
+        <div className="mx-auto flex h-screen w-full max-w-[960px] flex-1 flex-col overflow-hidden px-5">
+          <Navbar onNewChat={newChat} />
+          <ChatWindow
+            key={activeId}
+            initialMessages={activeMessages}
+            onMessagesChange={(msgs) => handleMessagesChange(activeId, msgs)}
+          />
+        </div>
       </div>
-    </div>
+      <LoginModal open={!authorized} onUnlocked={() => setAuthorized(true)} />
+    </>
   );
 }
