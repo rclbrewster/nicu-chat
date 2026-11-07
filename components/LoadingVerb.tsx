@@ -12,11 +12,16 @@ const VERBS = [
   "Infusing",
   "Repleting",
   "Assessing",
-  "Planning",
-  "Escalating",
+  "Convalescing",
+  "Optimizing",
   "Admitting",
   "Discharging",
-  "Transferring",
+  "Feeding",
+  "Gavaging",
+  "Poking",
+  "Neuroprotecting",
+  "Kangarooing",
+  "Diagnosing",
 ];
 
 export default function LoadingVerb() {
