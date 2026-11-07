@@ -15,8 +15,10 @@ export default function LoginModal({
   const [mode, setMode] = useState<Mode>("login");
   const [code, setCode] = useState("");
   const [email, setEmail] = useState("");
+  const [issuedCode, setIssuedCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   if (!open) return null;
 
@@ -55,13 +57,40 @@ export default function LoginModal({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.trim() }),
     });
+    const json = await res.json().catch(() => ({}));
     setBusy(false);
     if (!res.ok) {
-      const json = await res.json().catch(() => ({}));
       setError(json.error || "Something went wrong. Try again.");
       return;
     }
+    setIssuedCode(json.code || "");
     setMode("requested");
+  }
+
+  async function continueWithIssuedCode() {
+    setError(null);
+    setBusy(true);
+    const res = await fetch("/api/auth/unlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: issuedCode }),
+    });
+    setBusy(false);
+    if (!res.ok) {
+      setError("Something went wrong signing you in. Try entering the code above manually.");
+      return;
+    }
+    onUnlocked();
+  }
+
+  async function copyIssuedCode() {
+    try {
+      await navigator.clipboard.writeText(issuedCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // Clipboard permission denied -- the code is still shown on screen.
+    }
   }
 
   return (
@@ -118,7 +147,7 @@ export default function LoginModal({
         {mode === "request" && (
           <>
             <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
-              Enter your email. It&rsquo;ll be reviewed and a code sent back to you.
+              Enter your @stanford.edu email to get the access code instantly.
             </p>
 
             {error && (
@@ -145,7 +174,7 @@ export default function LoginModal({
                   (canSubmitEmail ? "bg-action text-white" : "bg-hairline text-ink-80")
                 }
               >
-                {busy ? "Sending…" : "Send request"}
+                {busy ? "Checking…" : "Get access code"}
               </button>
             </form>
 
@@ -162,12 +191,37 @@ export default function LoginModal({
         {mode === "requested" && (
           <>
             <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
-              Request sent. We&rsquo;ll review it and send you an access code.
+              Verified. Here&rsquo;s your access code:
             </p>
+
+            {error && (
+              <p className="mt-4 text-[14px] tracking-[-0.224px] text-[color:var(--danger)]">
+                {error}
+              </p>
+            )}
+
+            <button
+              type="button"
+              onClick={copyIssuedCode}
+              className="mt-6 block w-full rounded-[12px] bg-parchment px-5 py-3 text-center font-mono text-[19px] tracking-[-0.374px] text-ink"
+              title="Click to copy"
+            >
+              {copied ? "Copied" : issuedCode}
+            </button>
+
+            <button
+              type="button"
+              onClick={continueWithIssuedCode}
+              disabled={busy}
+              className="mt-3 h-11 w-full rounded-full bg-action text-[17px] tracking-[-0.374px] text-white disabled:opacity-40"
+            >
+              {busy ? "Signing in…" : "Continue"}
+            </button>
+
             <button
               type="button"
               onClick={() => goTo("login")}
-              className="mt-6 h-11 w-full rounded-full border border-hairline text-[15px] tracking-[-0.224px] text-ink-80"
+              className="mt-4 w-full text-center text-[14px] tracking-[-0.224px] text-ink-48 hover:text-ink-80"
             >
               Back to sign in
             </button>
