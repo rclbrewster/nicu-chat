@@ -102,7 +102,7 @@ export default function LoginModal({
 
         {mode === "login" && (
           <>
-            <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
+            <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-80">
               Enter the access code you were given.
             </p>
 
