@@ -7,10 +7,10 @@ import BouncingDots from "./BouncingDots";
 import type { Source } from "./SourcesList";
 
 const STARTERS = [
-  "Empiric antibiotics for suspected early-onset sepsis",
-  "Starting parenteral nutrition on day 1",
-  "Indomethacin dosing for a symptomatic PDA",
-  "Phototherapy thresholds for a 34-week infant",
+  "What is the delivery room checklist for an abdominal wall defect?",
+  "How do you correct hyponatremia?",
+  "What are the steps to performing a lumbar puncture?",
+  "What is the feeding pathway for a 1 kg infant?",
 ];
 
 function parseSources(raw: string): Source[] {
@@ -32,6 +32,20 @@ function SendArrowIcon() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M20 20l-3.5-3.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
       />
     </svg>
   );
@@ -148,7 +162,7 @@ export default function ChatWindow({
         e.preventDefault();
         send(input);
       }}
-      className="flex w-full items-center gap-2 rounded-full border border-hairline bg-parchment py-1.5 pl-5 pr-1.5 focus-within:border-action"
+      className="flex w-full items-center gap-2 rounded-[12px] border border-hairline bg-parchment py-1.5 pl-5 pr-1.5 focus-within:border-action"
     >
       <input
         ref={inputRef}
@@ -163,8 +177,8 @@ export default function ChatWindow({
         disabled={!canSend}
         aria-label="Send"
         className={
-          "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white " +
-          (canSend ? "bg-action" : "bg-ink-48")
+          "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] " +
+          (canSend ? "bg-action text-white" : "bg-hairline text-ink-80")
         }
       >
         {busy ? <BouncingDots size={4} /> : <SendArrowIcon />}
@@ -176,22 +190,25 @@ export default function ChatWindow({
     return (
       <div className="flex flex-1 flex-col items-center justify-center px-2 py-10 text-center">
         <h1 className="font-display text-[28px] font-semibold leading-tight tracking-[-0.28px]">
-          What do you need to look up?
+          How can I help?
         </h1>
         <p className="mt-2 text-[15px] tracking-[-0.224px] text-ink-48">
-          Answers come only from this unit&rsquo;s loaded documents.
+          Answers come only from the Stanford NICU protocols and guidelines.
         </p>
 
         <div className="mt-8 w-full max-w-xl">{inputForm}</div>
 
-        <div className="mt-6 flex max-w-xl flex-wrap justify-center gap-2.5">
+        <div className="mt-6 w-full max-w-xl divide-y divide-hairline text-left">
           {STARTERS.map((s) => (
             <button
               key={s}
               onClick={() => send(s)}
-              className="rounded-full border border-hairline bg-canvas px-4 py-2 text-[14px] tracking-[-0.224px] text-ink-80 hover:border-ink-48"
+              className="flex w-full items-center gap-3 py-3 text-left hover:bg-parchment"
             >
-              {s}
+              <span className="shrink-0 text-ink-48">
+                <SearchIcon />
+              </span>
+              <span className="text-[15px] tracking-[-0.224px] text-ink">{s}</span>
             </button>
           ))}
         </div>

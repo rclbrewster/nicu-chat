@@ -49,7 +49,7 @@ export default function HistorySidebar({
               title={c.title}
               className={
                 "block w-full truncate rounded-[8px] px-2 py-1.5 pr-7 text-left text-[15px] tracking-[-0.224px] text-ink " +
-                (c.id === activeId ? "bg-hairline" : "hover:bg-divider")
+                (c.id === activeId ? "bg-[#e3e6ec]" : "hover:bg-hairline")
               }
             >
               {c.title}

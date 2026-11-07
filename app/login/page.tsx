@@ -30,8 +30,8 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-[400px] flex-col items-center justify-center px-6">
-      <div className="w-full rounded-[18px] border border-hairline bg-canvas p-8">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-parchment px-6">
+      <div className="mx-auto w-full max-w-[400px] rounded-[18px] bg-canvas p-8">
         <h1 className="font-display text-[28px] font-semibold leading-tight tracking-[-0.28px]">
           NICU Wayfinder
         </h1>
@@ -53,7 +53,7 @@ export default function LoginPage() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Access code"
-            className="h-11 w-full rounded-full border border-hairline bg-canvas px-5 text-[17px] tracking-[-0.374px] outline-none placeholder:text-ink-48 focus:border-action"
+            className="h-11 w-full rounded-[12px] bg-parchment px-5 text-[17px] tracking-[-0.374px] outline-none placeholder:text-ink-48"
           />
           <button
             type="submit"

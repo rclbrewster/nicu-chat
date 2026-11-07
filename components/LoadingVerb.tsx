@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import BouncingDots from "./BouncingDots";
 
 const VERBS = [
   "Intubating",
@@ -30,9 +29,8 @@ export default function LoadingVerb() {
   }, []);
 
   return (
-    <span className="inline-flex items-center gap-1.5 text-[15px] tracking-[-0.224px] text-ink-48">
+    <span className="inline-flex items-center text-[15px] tracking-[-0.224px] text-ink-48">
       {VERBS[index]}
-      <BouncingDots />
     </span>
   );
 }
