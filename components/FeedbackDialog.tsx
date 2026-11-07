@@ -130,7 +130,7 @@ export default function FeedbackDialog({
             </p>
             <button
               onClick={close}
-              className="mt-5 h-11 w-full rounded-full bg-action text-[17px] tracking-[-0.374px] text-white"
+              className="mt-5 h-11 w-full rounded-[12px] bg-action text-[17px] tracking-[-0.374px] text-white"
             >
               Close
             </button>
@@ -177,7 +177,7 @@ export default function FeedbackDialog({
               onChange={(e) => setComment(e.target.value)}
               placeholder="What happened, and what did you expect instead?"
               rows={4}
-              className="mt-1.5 w-full rounded-lg bg-parchment p-3 text-[15px] leading-relaxed tracking-[-0.224px] outline-none placeholder:text-ink-48 focus:border focus:border-action"
+              className="mt-1.5 w-full rounded-lg bg-parchment p-3 text-[15px] leading-relaxed tracking-[-0.224px] outline-none placeholder:text-ink-48 focus:border focus:border-ink"
             />
 
             {error && (
@@ -189,7 +189,7 @@ export default function FeedbackDialog({
             <button
               type="submit"
               disabled={busy}
-              className="mt-5 h-11 w-full rounded-full bg-action text-[15px] tracking-[-0.224px] text-white disabled:opacity-40"
+              className="mt-5 h-11 w-full rounded-[12px] bg-action text-[15px] tracking-[-0.224px] text-white disabled:opacity-40"
             >
               {busy ? "Sending…" : "Send"}
             </button>

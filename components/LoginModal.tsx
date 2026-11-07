@@ -126,7 +126,7 @@ export default function LoginModal({
                 type="submit"
                 disabled={!canSubmitCode}
                 className={
-                  "h-11 w-full rounded-full text-[17px] tracking-[-0.374px] transition-colors " +
+                  "h-11 w-full rounded-[12px] text-[17px] tracking-[-0.374px] transition-colors " +
                   (canSubmitCode ? "bg-action text-white" : "bg-hairline text-ink-80")
                 }
               >
@@ -170,7 +170,7 @@ export default function LoginModal({
                 type="submit"
                 disabled={!canSubmitEmail}
                 className={
-                  "h-11 w-full rounded-full text-[17px] tracking-[-0.374px] transition-colors " +
+                  "h-11 w-full rounded-[12px] text-[17px] tracking-[-0.374px] transition-colors " +
                   (canSubmitEmail ? "bg-action text-white" : "bg-hairline text-ink-80")
                 }
               >
@@ -218,7 +218,7 @@ export default function LoginModal({
               type="button"
               onClick={continueWithIssuedCode}
               disabled={busy}
-              className="mt-3 h-11 w-full rounded-full bg-action text-[17px] tracking-[-0.374px] text-white disabled:opacity-40"
+              className="mt-3 h-11 w-full rounded-[12px] bg-action text-[17px] tracking-[-0.374px] text-white disabled:opacity-40"
             >
               {busy ? "Signing in…" : "Continue"}
             </button>

@@ -161,7 +161,7 @@ export default function ChatWindow({
         e.preventDefault();
         send(input);
       }}
-      className="flex w-full items-center gap-2 rounded-[12px] border border-hairline bg-parchment py-1.5 pl-5 pr-1.5 focus-within:border-action"
+      className="flex w-full items-center gap-2 rounded-[12px] border border-hairline bg-parchment py-1.5 pl-5 pr-1.5 focus-within:border-ink"
     >
       <input
         ref={inputRef}
