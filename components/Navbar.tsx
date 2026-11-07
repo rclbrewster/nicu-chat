@@ -63,14 +63,14 @@ export default function Navbar({ onNewChat }: { onNewChat?: () => void }) {
                 setMenuOpen(false);
                 setFeedbackOpen(true);
               }}
-              className="block w-full px-4 py-2 text-left text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-parchment"
+              className="block w-full px-4 py-2 text-left text-[14px] tracking-[-0.224px] text-ink hover:bg-parchment"
             >
               Feedback
             </button>
             <button
               onClick={signOut}
               disabled={signingOut}
-              className="block w-full px-4 py-2 text-left text-[14px] tracking-[-0.224px] text-ink-80 hover:bg-parchment disabled:opacity-50"
+              className="block w-full px-4 py-2 text-left text-[14px] tracking-[-0.224px] text-ink hover:bg-parchment disabled:opacity-50"
             >
               {signingOut ? "Signing out…" : "Sign out"}
             </button>

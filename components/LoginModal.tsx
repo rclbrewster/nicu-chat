@@ -137,7 +137,7 @@ export default function LoginModal({
             <button
               type="button"
               onClick={() => goTo("request")}
-              className="mt-4 w-full text-center text-[14px] tracking-[-0.224px] text-ink-48 hover:text-ink-80"
+              className="mt-4 w-full text-center text-[14px] tracking-[-0.224px] text-ink-80 hover:text-ink"
             >
               Request access code
             </button>
@@ -191,7 +191,8 @@ export default function LoginModal({
         {mode === "requested" && (
           <>
             <p className="mt-2 text-[17px] tracking-[-0.374px] text-ink-48">
-              Verified. Here&rsquo;s your access code:
+              Verified. This is your access code — it also signs you in to
+              NICU Wayfinder on every future visit, so save it somewhere safe.
             </p>
 
             {error && (
@@ -200,14 +201,18 @@ export default function LoginModal({
               </p>
             )}
 
-            <button
-              type="button"
-              onClick={copyIssuedCode}
-              className="mt-6 block w-full rounded-[12px] bg-parchment px-5 py-3 text-center font-mono text-[19px] tracking-[-0.374px] text-ink"
-              title="Click to copy"
-            >
-              {copied ? "Copied" : issuedCode}
-            </button>
+            <div className="mt-6 flex items-center gap-2 rounded-[12px] bg-parchment py-1.5 pl-5 pr-2">
+              <span className="flex-1 truncate font-mono text-[18px] tracking-[-0.374px] text-ink">
+                {issuedCode}
+              </span>
+              <button
+                type="button"
+                onClick={copyIssuedCode}
+                className="shrink-0 rounded-[8px] px-3 py-2 text-[13px] font-medium tracking-[-0.12px] text-ink-80 hover:bg-hairline hover:text-ink"
+              >
+                {copied ? "Copied" : "Copy"}
+              </button>
+            </div>
 
             <button
               type="button"
@@ -228,6 +233,7 @@ export default function LoginModal({
           </>
         )}
 
+        <hr className="mt-6 border-t border-hairline" />
         <Disclaimer />
       </div>
     </div>
