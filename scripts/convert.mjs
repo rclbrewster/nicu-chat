@@ -82,7 +82,12 @@ function slugify(relPath) {
 }
 
 function titleFromName(relPath) {
-  const base = path.basename(relPath).replace(/\.[^.]+$/, "");
+  // Drop macOS's " (1)", " (2)", ... duplicate-download suffix so only the
+  // actual document name ends up as the title.
+  const base = path
+    .basename(relPath)
+    .replace(/\.[^.]+$/, "")
+    .replace(/\s*\(\d+\)$/, "");
   return base
     .replace(/[_-]+/g, " ")
     .replace(/\s+/g, " ")

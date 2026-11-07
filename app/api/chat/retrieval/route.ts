@@ -244,6 +244,12 @@ Output only the scores, one per line:`;
 const combineDocuments = (docs: Document[]) =>
   docs.map((d) => d.pageContent).join("\n\n---\n\n");
 
+// Strips duplicate-download artifacts macOS appends to a filename
+// (" (1)", " (2)", ...) so only the actual document name is shown.
+function cleanSourceName(name: string): string {
+  return name.replace(/\s*\(\d+\)(?=\.[^./]*$|$)/, "").trim();
+}
+
 function sourcesHeader(docs: Document[]): string {
   const seen = new Set<string>();
   const sources = [];
@@ -252,9 +258,11 @@ function sourcesHeader(docs: Document[]): string {
     const key = String(md.source_file ?? md.source ?? "");
     if (!key || seen.has(key)) continue;
     seen.add(key);
+    const title = String(md.title ?? key);
+    const sourceFile = md.source_file ? String(md.source_file) : null;
     sources.push({
-      title: md.title ?? key,
-      source_file: md.source_file ?? null,
+      title: cleanSourceName(title),
+      source_file: sourceFile ? cleanSourceName(sourceFile) : null,
       section: md.section ?? null,
     });
   }
